@@ -4,7 +4,12 @@ import { SqlToolkit } from "langchain/agents/toolkits/sql";
 import { Calculator } from "langchain/tools/calculator";
 import { createOpenAIFunctionsAgent, AgentExecutor } from "langchain/agents";
 import { DataSource } from "typeorm";
-import type { ChatPromptTemplate } from "langchain/prompts";
+import {
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+    MessagesPlaceholder,
+  } from "langchain/prompts";
 import { pull } from "langchain/hub";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -41,9 +46,20 @@ export default async function init() {
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-3.5-turbo"
     })
-    const prompt = await pull<ChatPromptTemplate>(
-        "hwchase17/openai-functions-agent"
-    );
+    // const prompt = await pull<ChatPromptTemplate>(
+    //     "hwchase17/openai-functions-agent"
+    //     // "stepbystep/conversational-agent"
+    // );
+    // write a custom prompt
+    const systemMsg = SystemMessagePromptTemplate.fromTemplate("You are a helpful assistant who guides people through selecting the right tool for their needs. You are a tool expert. You are bad at math. Make use of the tools you have to help people find the right tool for their needs.");
+    const humanMsg = HumanMessagePromptTemplate.fromTemplate("{input}");
+    const prompt = ChatPromptTemplate.fromMessages([
+        systemMsg,
+        humanMsg,
+        new MessagesPlaceholder("agent_scratchpad"),
+    ]);
+    // print the prompt
+    console.log(prompt.promptMessages[0]);
     const agent = await createOpenAIFunctionsAgent({
         llm: model,
         tools,
