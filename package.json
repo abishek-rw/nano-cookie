@@ -1,5 +1,5 @@
 {
-	"name": "typescript-node",
+	"name": "nano-cookie",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -16,6 +16,8 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/better-sqlite3": "^7.6.8",
+		"drizzle-kit": "^0.20.13",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"svelte": "^4.2.7",
@@ -27,12 +29,19 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@langchain/openai": "^0.0.12",
+		"better-sqlite3": "^9.3.0",
+		"drizzle-orm": "^0.29.3",
 		"langchain": "^0.1.4"
+	},
+	"resolutions": {
+		"@langchain/core": "0.1.5"
 	},
 	"pnpm": {
 		"overrides": {
 			"@langchain/core": "0.1.5"
 		}
+	},
+	"overrides": {
+		"@langchain/core": "0.1.5"
 	}
 }
